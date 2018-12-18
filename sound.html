@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <script src = "/libraries/Tone.min.js"></script>
+    <script src="/libraries/JQuery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div class="grid-container">
+        <div id ="C4" class = "grid-item">
+            <h1 class = "soundPageNotes">C4</h1>
+        </div>
+        <div id ="D4" class = "grid-item">
+            <h1 class = "soundPageNotes">D4</h1>
+        </div>
+        <div id ="E4" class = "grid-item">
+            <h1 class = "soundPageNotes">E4</h1>
+        </div>
+        <div id ="F4" class = "grid-item">
+            <h1 class = "soundPageNotes">F4</h1>
+        </div>
+        <div id ="G4" class = "grid-item">
+            <h1 class = "soundPageNotes">G4</h1>
+        </div>
+        <div id ="A4" class = "grid-item">
+            <h1 class = "soundPageNotes">A4</h1>
+        </div>
+        <div id ="B4" class = "grid-item">
+            <h1 class = "soundPageNotes">B4</h1>
+        </div>
+        <div id ="C5" class = "grid-item">
+            <h1 class = "soundPageNotes">C5</h1>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    var synth = new Tone.PolySynth(6, Tone.Synth, {
+	"oscillator" : {
+	"partials" : [0, 2, 3, 4],
+	    }
+    }).toMaster();
+
+    //Initiate web socket on client side
+    var socket = io.connect();
+    socket.on('connect', function () {
+        console.log("Connected");
+        socket.emit('role','sound');
+    });
+
+    socket.on('C4', function (data) {
+        synth.triggerAttackRelease("C4", "8n");
+        console.log("Play C4");
+        $("#C4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('D4', function (data) {
+        synth.triggerAttackRelease("D4", "8n");
+        console.log("Play D4");
+        $("#D4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('E4', function (data) {
+        synth.triggerAttackRelease("E4", "8n");
+        console.log("Play E4");
+        $("#E4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('F4', function (data) {
+        synth.triggerAttackRelease("F4", "8n");
+        console.log("Play F4");
+        $("#F4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('G4', function (data) {
+        synth.triggerAttackRelease("G4", "8n");
+        console.log("Play G4");
+        $("#G4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('A4', function (data) {
+        synth.triggerAttackRelease("A4", "8n");
+        console.log("Play A4");
+        $("#A4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('B4', function (data) {
+        synth.triggerAttackRelease("B4", "8n");
+        console.log("Play B4");
+        $("#B4").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+    socket.on('C5', function (data) {
+        synth.triggerAttackRelease("C5", "8n");
+        console.log("Play C5");
+        $("#C5").css("opacity", 1).animate({"opacity" : 0.3}, 300);
+    });
+
+</script>
+
+</html>

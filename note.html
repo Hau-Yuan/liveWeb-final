@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+
+        //Set default note as null
+        var triggerable = true;
+        var note = null;
+        var threshold = null;
+
+        //Initiate web socket on client side
+        var socket = io.connect();
+        socket.on('connect', function () {
+            console.log("Connected");
+            socket.emit('role','note');
+        });
+
+        //Wait to be assigned for a note
+        socket.on('note', function (data) {
+            note = data;
+            document.getElementById("note").innerHTML = note;
+            console.log(note);
+            assignBackgroundColor(note);
+        });
+
+        //Set different threshold for different devices
+        socket.on('threshold', function (data) {
+            threshold = data;
+        });
+
+        function assignBackgroundColor(note) {
+            console.log(note);
+            if (note == "C4") {
+                document.body.style.backgroundColor = "#ff4d6b";
+            } else if (note == "D4") {
+                document.body.style.backgroundColor = "#ff7142";
+            } else if (note == "E4") {
+                document.body.style.backgroundColor = "#ffff66";
+            } else if (note == "F4") {
+                document.body.style.backgroundColor = "#33ff98";
+            } else if (note == "G4") {
+                document.body.style.backgroundColor = "#33ffff";
+            } else if (note == "A4") {
+                document.body.style.backgroundColor = "#3399ff";
+            } else if (note == "B4") {
+                document.body.style.backgroundColor = "#b28cff";
+            } else if (note == "C5") {
+                document.body.style.backgroundColor = "#ff8cd9";
+            }
+        }
+
+        function ondevicemotion(e) {
+            var x = e.acceleration.x;
+            var y = e.acceleration.y;
+            var z = e.acceleration.z;
+
+            var intX = Math.floor(x * 10000);
+            var intY = Math.floor(y * 10000);
+            var intZ = Math.floor(z * 10000);
+
+            //Trigger when the acceleration is enough
+            if (triggerable == true) {
+                if (intY > threshold) {
+                    socket.emit(note, "play the note");
+                    document.getElementById("note").style.color = "white";
+                    turnOffAcceleration();
+                } else {
+                    document.getElementById("note").style.color = "#666";
+                }
+            }
+
+            function turnOffAcceleration() {
+                triggerable = false;
+                setTimeout(turnOnAcceleration, 200);
+            }
+            function turnOnAcceleration() {
+                triggerable = true;
+            }
+
+        }
+
+        window.addEventListener('devicemotion', ondevicemotion, false);
+
+    </script>
+</head>
+
+<body>
+    <h1 id="note" class="notes"></h1>
+</body>
+
+</html>
